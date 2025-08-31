@@ -3,7 +3,8 @@
 """
 import os
 from typing import Optional
-from pydantic import BaseSettings, Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import Field
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,7 +13,7 @@ class Settings(BaseSettings):
     """系统配置"""
     
     # OpenAI配置
-    openai_api_key: str = Field(..., env="OPENAI_API_KEY")
+    openai_api_key: Optional[str] = Field(None, env="OPENAI_API_KEY")
     openai_model: str = Field("gpt-4-turbo-preview", env="OPENAI_MODEL")
     
     # 监控系统配置

@@ -1,14 +1,23 @@
-# AI智能告警系统核心依赖包
-langchain==0.1.0
-langgraph==0.0.26
-langchain-openai==0.0.8
-langchain-community==0.0.10
-chromadb==0.4.18
-numpy==1.24.3
-pandas==2.0.3
-python-dotenv==1.0.0
-grpcio==1.60.0
-grpcio-tools==1.60.0
-structlog==23.2.0
-rich==13.7.0
-asyncio-mqtt==0.16.1
+# AI智能告警系统核心依赖包（LangChain版）
+# 核心AI依赖
+openai>=1.12.0
+langchain>=0.1.0
+langchain-openai>=0.0.5
+langchain-core>=0.1.0
+chromadb>=0.4.18
+
+# 数据处理
+numpy>=1.24.3
+pandas>=2.0.3
+
+# 系统和配置
+python-dotenv>=1.0.0
+grpcio>=1.60.0
+grpcio-tools>=1.60.0
+
+# 日志和输出
+structlog>=23.2.0
+rich>=13.7.0
+
+# 可选：异步通信
+asyncio-mqtt>=0.16.1

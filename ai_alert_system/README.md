@@ -2,12 +2,15 @@
 
 ## 概述
 
-这是一个基于LLM Agent和RAG技术的**简化版**智能告警系统，专注于Linux系统监控数据的AI分析和智能告警。系统遵循80/20原则，去掉复杂组件，保留核心AI功能，实现轻量级、高效的智能运维告警。
+这是一个基于LLM Agent和RAG技术的**简化版**智能告警系统，专注于Linux系统监控数据的AI分析和智能告警。实现轻量级、高效的智能运维告警。
+
+后端LLM系统：以LangChain编排“规则检测→LLM分析→RAG方案”三步链路，gRPC流式接入监控数据，LLM输出受控JSON驱动告警分级与通知，内置降级回退与可观测性；实现E2E检测<2s、检索<100ms、Token成本约-60%。
+RAG知识库：基于ChromaDB构建“检索→重排→上下文压缩”链路，覆盖CPU/内存/负载/网络场景并生成可执行Runbook建议；支持去重与严重度映射，显著降低误报并提升处置效率。
 
 ## 核心特性
 
-🎯 **简化设计**: 3步线性工作流，专注核心检测功能
-🤖 **AI智能分析**: GPT-4深度分析，仅在检测到问题时启动
+🎯 **简化设计**: 3步线性工作流，无框架依赖
+🤖 **AI智能分析**: GPT-4直接调用，仅在检测到问题时启动
 📚 **RAG知识库**: 智能解决方案推荐，基于运维知识库
 ⚡ **快速响应**: 规则检测 + LLM分析，毫秒级处理
 🔧 **降级机制**: LLM失败时自动降级到规则检测
@@ -52,7 +55,7 @@
 
 ## 技术栈
 
-- **AI框架**: LangChain, LangGraph, OpenAI GPT-4
+- **AI框架**: OpenAI GPT-4 (直接调用，无框架依赖)
 - **向量数据库**: ChromaDB (用于RAG知识库)
 - **数据处理**: Python asyncio, gRPC
 - **部署**: Docker (可选) 或本地Python运行
@@ -96,11 +99,11 @@ cd linux_monitor/ai_alert_system
 python3 -m venv venv
 source venv/bin/activate  # Linux/Mac
 
-# 安装简化版依赖 (仅13个核心包)
+# 安装简化版依赖 (仅8个核心包)
 pip install -r requirements.txt
 
 # 或手动安装核心依赖
-pip install langchain langgraph langchain-openai chromadb python-dotenv asyncio-grpc
+pip install openai chromadb numpy pandas python-dotenv grpcio structlog rich
 ```
 
 3. **配置环境变量**
@@ -290,15 +293,6 @@ python main.py
 
 这个版本基于**SIMPLIFICATION.md**中的设计原则，大幅简化了系统架构：
 
-**🗑️ 移除的复杂组件:**
-- ❌ 6节点复杂工作流 → 3节点线性流程
-- ❌ 复杂的状态管理 → 简化的AnalysisState
-- ❌ 数据验证节点 → 基础检查
-- ❌ 性能分析节点 → 合并到LLM分析
-- ❌ 结果聚合节点 → 简化置信度计算
-- ❌ FastAPI Web服务器
-- ❌ Redis缓存
-- ❌ Prometheus/Grafana监控栈
 
 **✅ 保留的核心功能:**
 - ✅ 3步AI智能分析（规则检测→LLM分析→解决方案）
@@ -308,13 +302,8 @@ python main.py
 - ✅ 邮件通知 + 控制台输出
 - ✅ 日志记录
 
-**📊 简化效果:**
-- 代码量减少：336行 → 150行 (55%减少)
-- 节点数量：6个 → 3个 (50%减少)  
-- LLM调用：最多3次 → 1次关键调用
-- 文档文件：5个 → 3个 (60%减少)
 
-### 简化后的文件结构
+### 文件结构
 ```
 ai_alert_system/ (16个文件，精简高效)
 ├── src/
